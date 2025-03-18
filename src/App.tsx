@@ -59,7 +59,7 @@ const App: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <Tabs defaultActiveKey="1" style={{ maxWidth: "25%", margin: "0 auto" }}>
+        <Tabs defaultActiveKey="1" style={{ maxWidth: "100%", margin: "0 auto" }}>
           <TabPane tab="Data" key="1">
             <div
               style={{
@@ -93,7 +93,7 @@ const App: React.FC = () => {
               style={{
                 padding: "20px",
                 backgroundColor: "#f7f7f7",
-                height: "300px",
+                height: "100%",
                 overflowY: "auto",
               }}
             >
