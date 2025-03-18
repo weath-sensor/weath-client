@@ -63,7 +63,7 @@ const App: React.FC = () => {
           <TabPane tab="Data" key="1">
             <div
               style={{
-                maxHeight: "400px",
+                maxHeight: "100%",
                 overflowY: "auto",
                 border: "1px solid #ddd",
                 borderRadius: "8px",
