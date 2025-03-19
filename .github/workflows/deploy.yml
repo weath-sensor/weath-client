@@ -23,5 +23,5 @@ jobs:
             cd devstore/weath-sensor/weath-client
             git pull origin main
             npm install
-            npm run dev
+            npm run dev > /dev/null 2>&1 &
             echo "Deployment complete!"
