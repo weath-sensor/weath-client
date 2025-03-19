@@ -36,13 +36,18 @@ const App: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const renderCurrentData = (data, label) => {
+  const renderCurrentData = (data, label, totalRecords) => {
     if (!data.length) return <p>No data available</p>;
     const latest = data[0];
     return (
-      <Card style={{ marginBottom: "10px" }}>
-        <p><strong>{label}:</strong> {latest[label]}</p>
-        <p><strong>Timestamp:</strong> {new Date(latest.timestamp).toLocaleString()}</p>
+      <Card style={{ marginBottom: "10px", display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <p><strong>{label}:</strong> {latest[label]}</p>
+          <p><strong>Timestamp:</strong> {new Date(latest.timestamp).toLocaleString()}</p>
+        </div>
+        <div>
+          <p><strong>Total Records:</strong> {totalRecords}</p>
+        </div>
       </Card>
     );
   };
@@ -72,15 +77,15 @@ const App: React.FC = () => {
       ) : (
         <Tabs activeKey={activeTab} onChange={setActiveTab}>
           <TabPane tab="LDR Data" key="1">
-            {renderCurrentData(ldrData, "ldr_value")}
+            {renderCurrentData(ldrData, "ldr_value", ldrData.length)}
             <Table dataSource={ldrData} columns={columns.ldr} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Temperature Data" key="2">
-            {renderCurrentData(temperatureData, "temperature")}
+            {renderCurrentData(temperatureData, "temperature", temperatureData.length)}
             <Table dataSource={temperatureData} columns={columns.temperature} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Humidity Data" key="3">
-            {renderCurrentData(humidityData, "humidity_value")}
+            {renderCurrentData(humidityData, "humidity_value", humidityData.length)}
             <Table dataSource={humidityData} columns={columns.humidity} pagination={false} rowKey="id" />
           </TabPane>
         </Tabs>
