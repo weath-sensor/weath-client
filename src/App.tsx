@@ -10,8 +10,6 @@ interface LdrData {
   timestamp: number;
 }
 
-// /cSOADSAD
-
 const App: React.FC = () => {
   const [ldrData, setLdrData] = useState<LdrData[]>([]);
   const [loading, setLoading] = useState(true);
