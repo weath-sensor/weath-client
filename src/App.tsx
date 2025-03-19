@@ -6,16 +6,16 @@ import { CanvasJSChart } from 'canvasjs-react-charts';
 const { TabPane } = Tabs;
 
 const App: React.FC = () => {
-  const [ldrData, setLdrData] = useState([]);
-  const [temperatureData, setTemperatureData] = useState([]);
-  const [humidityData, setHumidityData] = useState([]);
+  // Explicitly define the type of state for each data array
+  const [ldrData, setLdrData] = useState<{ id: number; ldr_value: number; timestamp: string }[]>([]);
+  const [temperatureData, setTemperatureData] = useState<{ id: number; temperature: number; timestamp: string }[]>([]);
+  const [humidityData, setHumidityData] = useState<{ id: number; humidity_value: number; timestamp: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [csvData, setCsvData] = useState('');
   const [activeTab, setActiveTab] = useState("1");
 
-  const limitData = (data) => data.slice(-50).reverse();
+  const limitData = (data: any[]) => data.slice(-50).reverse();
 
-  const fetchData = async (url, setter) => {
+  const fetchData = async (url: string, setter: React.Dispatch<React.SetStateAction<any[]>>) => {
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -26,14 +26,19 @@ const App: React.FC = () => {
     }
   };
 
-  const fetchCsvData = async () => {
+  const fetchCsvSummary = async () => {
     try {
-      const response = await fetch("http://51.222.111.230:3000/csv/summary");  // Change the URL if needed
+      const response = await fetch("http://51.222.111.230:3000/csv-summary");
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const text = await response.text();
-      setCsvData(text);  // Set the CSV data for display
+      const data = await response.text();
+      const link = document.createElement('a');
+      link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(data);
+      link.download = "csv-summary.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
-      console.error('Error fetching CSV:', error);
+      console.error("Error fetching CSV summary:", error);
     }
   };
 
@@ -49,11 +54,7 @@ const App: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  useEffect(() => {
-    fetchCsvData();  // Fetch CSV data when the component mounts
-  }, []);
-
-  const renderChart = (data, label, yKey) => {
+  const renderChart = (data: any[], label: string, yKey: string) => {
     const chartData = data.map((item) => ({
       x: new Date(item.timestamp),
       y: item[yKey],
@@ -85,7 +86,7 @@ const App: React.FC = () => {
             <Table dataSource={ldrData} columns={[
               { title: "ID", dataIndex: "id", key: "id" },
               { title: "LDR Value", dataIndex: "ldr_value", key: "ldr_value" },
-              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
+              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
             ]} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Temperature Data" key="2">
@@ -93,7 +94,7 @@ const App: React.FC = () => {
             <Table dataSource={temperatureData} columns={[
               { title: "ID", dataIndex: "id", key: "id" },
               { title: "Temperature (°C)", dataIndex: "temperature", key: "temperature" },
-              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
+              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
             ]} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Humidity Data" key="3">
@@ -101,16 +102,18 @@ const App: React.FC = () => {
             <Table dataSource={humidityData} columns={[
               { title: "ID", dataIndex: "id", key: "id" },
               { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
-              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
+              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
             ]} pagination={false} rowKey="id" />
-          </TabPane>
-          <TabPane tab="CSV Data" key="4">
-            <Card title="CSV Summary">
-              <pre>{csvData}</pre>  {/* Display CSV content */}
-            </Card>
           </TabPane>
         </Tabs>
       )}
+      <Button 
+        type="primary" 
+        style={{ marginTop: "20px" }} 
+        onClick={fetchCsvSummary}
+      >
+        Download CSV Summary
+      </Button>
     </div>
   );
 };
