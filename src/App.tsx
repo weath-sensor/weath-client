@@ -78,7 +78,7 @@ const App: React.FC = () => {
     const options = {
       animationEnabled: true,
       theme: "light2",
-      title: { text: `${label} Trends` },
+      title: { text: `${label}` },
       axisX: { valueFormatString: "HH:mm:ss" },
       axisY: { title: label },
       data: [{
