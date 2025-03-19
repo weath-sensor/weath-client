@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Repository
@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}  
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd devstore/weath-client
+            cd devstore/weath-sensor/weath-client
             pkill -f "npm run dev" || true
             git pull origin main
             npm install
