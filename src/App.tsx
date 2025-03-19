@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Table, Tabs, Card } from "antd";
 import "antd/dist/reset.css";
+import CanvasJSReact from "./canvasjs.react";
 
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const { TabPane } = Tabs;
 
 const App: React.FC = () => {
@@ -36,33 +38,25 @@ const App: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const renderCurrentData = (data, label) => {
-    if (!data.length) return <p>No data available</p>;
-    const latest = data[0];
-    return (
-      <Card style={{ marginBottom: "10px" }}>
-        <p><strong>{label}:</strong> {latest[label]}</p>
-        <p><strong>Timestamp:</strong> {new Date(latest.timestamp).toLocaleString()}</p>
-      </Card>
-    );
-  };
-
-  const columns = {
-    ldr: [
-      { title: "ID", dataIndex: "id", key: "id" },
-      { title: "LDR Value", dataIndex: "ldr_value", key: "ldr_value" },
-      { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
-    ],
-    temperature: [
-      { title: "ID", dataIndex: "id", key: "id" },
-      { title: "Temperature (°C)", dataIndex: "temperature", key: "temperature" },
-      { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
-    ],
-    humidity: [
-      { title: "ID", dataIndex: "id", key: "id" },
-      { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
-      { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
-    ],
+  const renderChart = (data, label, yKey) => {
+    const chartData = data.map((item) => ({
+      x: new Date(item.timestamp),
+      y: item[yKey],
+    }));
+    
+    const options = {
+      animationEnabled: true,
+      theme: "light2",
+      title: { text: `${label} Trends` },
+      axisX: { valueFormatString: "HH:mm:ss" },
+      axisY: { title: label },
+      data: [{
+        type: "line",
+        dataPoints: chartData,
+      }],
+    };
+    
+    return <CanvasJSChart options={options} />;
   };
 
   return (
@@ -72,16 +66,28 @@ const App: React.FC = () => {
       ) : (
         <Tabs activeKey={activeTab} onChange={setActiveTab}>
           <TabPane tab="LDR Data" key="1">
-            {renderCurrentData(ldrData, "ldr_value")}
-            <Table dataSource={ldrData} columns={columns.ldr} pagination={false} rowKey="id" />
+            {renderChart(ldrData, "LDR Value", "ldr_value")}
+            <Table dataSource={ldrData} columns={[
+              { title: "ID", dataIndex: "id", key: "id" },
+              { title: "LDR Value", dataIndex: "ldr_value", key: "ldr_value" },
+              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
+            ]} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Temperature Data" key="2">
-            {renderCurrentData(temperatureData, "temperature")}
-            <Table dataSource={temperatureData} columns={columns.temperature} pagination={false} rowKey="id" />
+            {renderChart(temperatureData, "Temperature (°C)", "temperature")}
+            <Table dataSource={temperatureData} columns={[
+              { title: "ID", dataIndex: "id", key: "id" },
+              { title: "Temperature (°C)", dataIndex: "temperature", key: "temperature" },
+              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
+            ]} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Humidity Data" key="3">
-            {renderCurrentData(humidityData, "humidity_value")}
-            <Table dataSource={humidityData} columns={columns.humidity} pagination={false} rowKey="id" />
+            {renderChart(humidityData, "Humidity (%)", "humidity_value")}
+            <Table dataSource={humidityData} columns={[
+              { title: "ID", dataIndex: "id", key: "id" },
+              { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
+              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
+            ]} pagination={false} rowKey="id" />
           </TabPane>
         </Tabs>
       )}
