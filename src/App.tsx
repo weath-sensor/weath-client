@@ -48,8 +48,10 @@ const App: React.FC = () => {
   };
 
   // Function to download CSV file
-  const downloadCSV = (csv: string, filename: string) => {
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const downloadCSV = (csv: string | null, filename: string) => {
+    // Handle null values by providing a fallback empty string
+    const csvContent = csv || '';  // If csv is null, fall back to an empty string
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, filename);
   };
 
@@ -78,7 +80,7 @@ const App: React.FC = () => {
     const options = {
       animationEnabled: true,
       theme: "light2",
-      title: { text: `${label}` },
+      title: { text: `${label} Trends` },
       axisX: { valueFormatString: "HH:mm:ss" },
       axisY: { title: label },
       data: [{
