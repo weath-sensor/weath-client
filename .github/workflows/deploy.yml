@@ -22,7 +22,8 @@ jobs:
           script: |
             cd devstore/weath-sensor/weath-client
             
-            pkill -f "npm run dev" > /dev/null 2>&1 || true
+            lsof -t -i:5173 | xargs kill -9 || echo "No process found running on port 5173" > /dev/null 2>&1
+            # ps aux | grep 'npm run dev' | grep -v grep | awk '{print $2}' | xargs kill -9 || echo "No npm run dev process found" > /dev/null 2>&1
             
             git pull origin main
             npm install
