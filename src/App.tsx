@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Tabs, Card } from "antd";
 import "antd/dist/reset.css";
-import CanvasJSReact from "./canvasjs.react";
+import CanvasJSReact from "canvasjs-react-charts";
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const { TabPane } = Tabs;
