@@ -13,7 +13,7 @@ interface LdrData {
 const App: React.FC = () => {
   const [ldrData, setLdrData] = useState<LdrData[]>([]);
   const [loading, setLoading] = useState(true);
-
+// asdasdasd
   const fetchData = async () => {
     try {
       const response = await fetch("http://51.222.111.230:3000/ldr-data");
