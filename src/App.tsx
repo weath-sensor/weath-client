@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Table, Tabs, Card } from "antd";
 import "antd/dist/reset.css";
-import CanvasJSReact from "canvasjs-react-charts";
+import { CanvasJSChart } from 'canvasjs-react-charts';
 
-const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const { TabPane } = Tabs;
 
 const App: React.FC = () => {
@@ -43,7 +42,7 @@ const App: React.FC = () => {
       x: new Date(item.timestamp),
       y: item[yKey],
     }));
-    
+
     const options = {
       animationEnabled: true,
       theme: "light2",
@@ -55,7 +54,7 @@ const App: React.FC = () => {
         dataPoints: chartData,
       }],
     };
-    
+
     return <CanvasJSChart options={options} />;
   };
 
