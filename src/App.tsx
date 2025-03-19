@@ -81,6 +81,13 @@ const App: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <>
+          <Button 
+            type="primary" 
+            style={{ marginTop: "20px" }} 
+            onClick={fetchCsvSummary}
+          >
+          Download CSV Summary
+          </Button>
           <Tabs activeKey={activeTab} onChange={setActiveTab}>
             <TabPane tab="LDR Data" key="1">
               {renderChart(ldrData, "LDR Value", "ldr_value")}
@@ -107,13 +114,7 @@ const App: React.FC = () => {
               ]} pagination={false} rowKey="id" />
             </TabPane>
           </Tabs>
-          <Button 
-            type="primary" 
-            style={{ marginTop: "20px" }} 
-            onClick={fetchCsvSummary}
-          >
-            Download CSV Summary
-          </Button>
+          
         </>
       )}
     </div>
