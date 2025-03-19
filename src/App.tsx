@@ -80,7 +80,15 @@ const App: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
+        
         <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <Button 
+          type="primary" 
+          style={{ marginTop: "20px" }} 
+          onClick={fetchCsvSummary}
+          >
+          Download CSV Summary
+          </Button>
           <TabPane tab="LDR Data" key="1">
             {renderChart(ldrData, "LDR Value", "ldr_value")}
             <Table dataSource={ldrData} columns={[
@@ -107,13 +115,7 @@ const App: React.FC = () => {
           </TabPane>
         </Tabs>
       )}
-      <Button 
-        type="primary" 
-        style={{ marginTop: "20px" }} 
-        onClick={fetchCsvSummary}
-      >
-        Download CSV Summary
-      </Button>
+      
     </div>
   );
 };
