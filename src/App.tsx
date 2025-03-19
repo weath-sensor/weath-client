@@ -8,25 +8,17 @@ const App: React.FC = () => {
   const [ldrData, setLdrData] = useState([]);
   const [temperatureData, setTemperatureData] = useState([]);
   const [humidityData, setHumidityData] = useState([]);
-  const [ldrTotal, setLdrTotal] = useState(0);
-  const [temperatureTotal, setTemperatureTotal] = useState(0);
-  const [humidityTotal, setHumidityTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("1");
 
   const limitData = (data) => data.slice(-100).reverse();
 
-  const fetchData = async (url, setter, countUrl, countSetter) => {
+  const fetchData = async (url, setter) => {
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       setter(limitData(data));
-      
-      const countResponse = await fetch(countUrl);
-      if (!countResponse.ok) throw new Error(`HTTP error! status: ${countResponse.status}`);
-      const countData = await countResponse.json();
-      countSetter(countData.count);
     } catch (error) {
       console.error(`Error fetching data from ${url}:`, error);
     }
@@ -34,9 +26,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      await fetchData("http://51.222.111.230:3000/ldr-data", setLdrData, "http://51.222.111.230:3000/ldr-data/count", setLdrTotal);
-      await fetchData("http://51.222.111.230:3000/temperature", setTemperatureData, "http://51.222.111.230:3000/temperature/count", setTemperatureTotal);
-      await fetchData("http://51.222.111.230:3000/humidity", setHumidityData, "http://51.222.111.230:3000/humidity/count", setHumidityTotal);
+      await fetchData("http://51.222.111.230:3000/ldr-data", setLdrData);
+      await fetchData("http://51.222.111.230:3000/temperature", setTemperatureData);
+      await fetchData("http://51.222.111.230:3000/humidity", setHumidityData);
       setLoading(false);
     };
     fetchAllData();
@@ -44,19 +36,13 @@ const App: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const renderCurrentData = (data, label, totalRecords, totalDbRecords) => {
+  const renderCurrentData = (data, label) => {
     if (!data.length) return <p>No data available</p>;
     const latest = data[0];
     return (
-      <Card style={{ marginBottom: "10px", display: "flex", justifyContent: "space-between" }}>
-        <div>
-          <p><strong>{label}:</strong> {latest[label]}</p>
-          <p><strong>Timestamp:</strong> {new Date(latest.timestamp).toLocaleString()}</p>
-        </div>
-        <div>
-          <p><strong>Fetched Records:</strong> {totalRecords}</p>
-          <p><strong>Total Records in DB:</strong> {totalDbRecords}</p>
-        </div>
+      <Card style={{ marginBottom: "10px" }}>
+        <p><strong>{label}:</strong> {latest[label]}</p>
+        <p><strong>Timestamp:</strong> {new Date(latest.timestamp).toLocaleString()}</p>
       </Card>
     );
   };
@@ -86,15 +72,15 @@ const App: React.FC = () => {
       ) : (
         <Tabs activeKey={activeTab} onChange={setActiveTab}>
           <TabPane tab="LDR Data" key="1">
-            {renderCurrentData(ldrData, "ldr_value", ldrData.length, ldrTotal)}
+            {renderCurrentData(ldrData, "ldr_value")}
             <Table dataSource={ldrData} columns={columns.ldr} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Temperature Data" key="2">
-            {renderCurrentData(temperatureData, "temperature", temperatureData.length, temperatureTotal)}
+            {renderCurrentData(temperatureData, "temperature")}
             <Table dataSource={temperatureData} columns={columns.temperature} pagination={false} rowKey="id" />
           </TabPane>
           <TabPane tab="Humidity Data" key="3">
-            {renderCurrentData(humidityData, "humidity_value", humidityData.length, humidityTotal)}
+            {renderCurrentData(humidityData, "humidity_value")}
             <Table dataSource={humidityData} columns={columns.humidity} pagination={false} rowKey="id" />
           </TabPane>
         </Tabs>
