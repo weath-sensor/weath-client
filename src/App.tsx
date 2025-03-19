@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Tabs } from "antd";
+import { Table, Tabs, Card } from "antd";
 import "antd/dist/reset.css";
-import CanvasJS from "canvasjs"; // Import the CanvasJS library
+import { CanvasJSChart } from 'canvasjs-react-charts';
 
 const { TabPane } = Tabs;
 
@@ -55,10 +55,7 @@ const App: React.FC = () => {
       }],
     };
 
-    const chart = new CanvasJS.Chart("chartContainer", options);
-    chart.render();
-
-    return <div id="chartContainer" style={{ height: "300px", width: "100%" }} />;
+    return <CanvasJSChart options={options} />;
   };
 
   return (
