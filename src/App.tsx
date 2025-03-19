@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Tabs, Button } from "antd";
+import { Table, Tabs, Card } from "antd";
 import "antd/dist/reset.css";
 import { CanvasJSChart } from 'canvasjs-react-charts';
-import { saveAs } from "file-saver";  // Importing file-saver to handle CSV download
 
 const { TabPane } = Tabs;
 
@@ -38,39 +37,6 @@ const App: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Function to convert data into CSV format
-  const generateCSV = (data: any[], columns: string[]) => {
-    const header = columns.join(",");
-    const rows = data
-      .map((row) => columns.map((col) => row[col]).join(","))
-      .join("\n");
-    return `${header}\n${rows}`;
-  };
-
-  // Function to download CSV file
-  const downloadCSV = (csv: string | null, filename: string) => {
-    // Handle null values by providing a fallback empty string
-    const csvContent = csv || '';  // If csv is null, fall back to an empty string
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, filename);
-  };
-
-  // Generate CSV every 30 minutes
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const ldrCsv = generateCSV(ldrData, ["id", "ldr_value", "timestamp"]);
-      const tempCsv = generateCSV(temperatureData, ["id", "temperature", "timestamp"]);
-      const humidityCsv = generateCSV(humidityData, ["id", "humidity_value", "timestamp"]);
-
-      // Saving generated CSV for download
-      window.localStorage.setItem("ldrCsv", ldrCsv);
-      window.localStorage.setItem("tempCsv", tempCsv);
-      window.localStorage.setItem("humidityCsv", humidityCsv);
-    }, 1800000); // 30 minutes in milliseconds
-
-    return () => clearInterval(intervalId);
-  }, [ldrData, temperatureData, humidityData]);
-
   const renderChart = (data, label, yKey) => {
     const chartData = data.map((item) => ({
       x: new Date(item.timestamp),
@@ -80,7 +46,7 @@ const App: React.FC = () => {
     const options = {
       animationEnabled: true,
       theme: "light2",
-      title: { text: `${label} Trends` },
+      title: { text: `${label}` },
       axisX: { valueFormatString: "HH:mm:ss" },
       axisY: { title: label },
       data: [{
@@ -121,17 +87,6 @@ const App: React.FC = () => {
               { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
               { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
             ]} pagination={false} rowKey="id" />
-          </TabPane>
-          <TabPane tab="CSV Data" key="4">
-            <Button onClick={() => downloadCSV(window.localStorage.getItem("ldrCsv"), "LDR_Data.csv")} style={{ margin: "10px" }}>
-              Download LDR Data CSV
-            </Button>
-            <Button onClick={() => downloadCSV(window.localStorage.getItem("tempCsv"), "Temperature_Data.csv")} style={{ margin: "10px" }}>
-              Download Temperature Data CSV
-            </Button>
-            <Button onClick={() => downloadCSV(window.localStorage.getItem("humidityCsv"), "Humidity_Data.csv")} style={{ margin: "10px" }}>
-              Download Humidity Data CSV
-            </Button>
           </TabPane>
         </Tabs>
       )}
