@@ -21,13 +21,15 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd devstore/weath-sensor/weath-client
-            
-            lsof -t -i:5173 | xargs kill -9 || echo "No process found running on port 5173" > /dev/null 2>&1
-            # ps aux | grep 'npm run dev' | grep -v grep | awk '{print $2}' | xargs kill -9 || echo "No npm run dev process found" > /dev/null 2>&1
-            
+
+            lsof -t -i:5173 | xargs kill -9 2>/dev/null || echo "No process found running on port 5173"
+
+            # ps aux | grep 'npm run dev' | grep -v grep | awk '{print $2}' | xargs kill -9 2>/dev/null || echo "No npm run dev process found"
+
             git pull origin main
+
             npm install
-            
-            npm run dev > /dev/null 2>&1 & 
-            
+
+            npm run dev > /dev/null 2>&1 &
+
             echo "Deployment complete!"
