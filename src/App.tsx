@@ -48,12 +48,15 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchLdrData();
-    fetchTemperatureData();
-    const intervalId = setInterval(() => {
-      fetchLdrData();
-      fetchTemperatureData();
-    }, 5000);
+    // Fetch both data
+    const fetchData = async () => {
+      await fetchLdrData();
+      await fetchTemperatureData();
+      setLoading(false);  // Stop the loading state after both are fetched
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
