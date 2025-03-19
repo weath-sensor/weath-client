@@ -16,9 +16,16 @@ interface TemperatureData {
   timestamp: number;
 }
 
+interface HumidityData {
+  id: number;
+  humidity_value: number;  // Changed to reflect humidity field name
+  timestamp: number;
+}
+
 const App: React.FC = () => {
   const [ldrData, setLdrData] = useState<LdrData[]>([]);
   const [temperatureData, setTemperatureData] = useState<TemperatureData[]>([]);
+  const [humidityData, setHumidityData] = useState<HumidityData[]>([]);  // New state for humidity data
   const [loading, setLoading] = useState(true);
 
   const fetchLdrData = async () => {
@@ -47,12 +54,25 @@ const App: React.FC = () => {
     }
   };
 
+  const fetchHumidityData = async () => {
+    try {
+      const response = await fetch("http://51.222.111.230:3000/humidity");  // Make sure the endpoint is correct
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data: HumidityData[] = await response.json();  // Adjusting type for humidity
+      setHumidityData(data);
+    } catch (error) {
+      console.error("Error fetching humidity data:", error);
+    }
+  };
+
   useEffect(() => {
-    // Fetch both data
     const fetchData = async () => {
       await fetchLdrData();
       await fetchTemperatureData();
-      setLoading(false);  // Stop the loading state after both are fetched
+      await fetchHumidityData();  // Fetch humidity data
+      setLoading(false);
     };
 
     fetchData();
@@ -98,6 +118,25 @@ const App: React.FC = () => {
     },
   ];
 
+  const humidityColumns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Humidity (%)",
+      dataIndex: "humidity_value",  // Reflect the humidity field name
+      key: "humidity_value",
+    },
+    {
+      title: "Timestamp",
+      dataIndex: "timestamp",
+      key: "timestamp",
+      render: (timestamp: number) => new Date(timestamp).toLocaleString(),
+    },
+  ];
+
   return (
     <div style={{ padding: "20px" }}>
       {loading ? (
@@ -132,7 +171,6 @@ const App: React.FC = () => {
             </div>
           </TabPane>
 
-          {/* Add Temperature Data Tab */}
           <TabPane tab="Temperature Data" key="2">
             <div
               style={{
@@ -161,7 +199,36 @@ const App: React.FC = () => {
             </div>
           </TabPane>
 
-          <TabPane tab="Other Tab" key="3">
+          {/* Add Humidity Data Tab */}
+          <TabPane tab="Humidity Data" key="3">
+            <div
+              style={{
+                maxHeight: "100%",
+                overflowY: "auto",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Table
+                dataSource={humidityData}  // Using humidityData state
+                columns={humidityColumns}  // Using humidityColumns
+                pagination={false}
+                rowKey="id"
+              />
+            </div>
+            <div
+              style={{
+                textAlign: "left",
+                marginTop: "10px",
+                fontSize: "14px",
+              }}
+            >
+              Total records: {humidityData.length}
+            </div>
+          </TabPane>
+
+          <TabPane tab="Other Tab" key="4">
             <div
               style={{
                 padding: "20px",
