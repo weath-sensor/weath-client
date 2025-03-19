@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("1");
 
-  const limitData = (data) => data.slice(0, 100);
+  const limitData = (data) => data.slice(-100).reverse();
 
   const fetchData = async (url, setter) => {
     try {
