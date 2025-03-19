@@ -80,42 +80,42 @@ const App: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        
-        <Tabs activeKey={activeTab} onChange={setActiveTab}>
+        <>
+          <Tabs activeKey={activeTab} onChange={setActiveTab}>
+            <TabPane tab="LDR Data" key="1">
+              {renderChart(ldrData, "LDR Value", "ldr_value")}
+              <Table dataSource={ldrData} columns={[
+                { title: "ID", dataIndex: "id", key: "id" },
+                { title: "LDR Value", dataIndex: "ldr_value", key: "ldr_value" },
+                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
+              ]} pagination={false} rowKey="id" />
+            </TabPane>
+            <TabPane tab="Temperature Data" key="2">
+              {renderChart(temperatureData, "Temperature (°C)", "temperature")}
+              <Table dataSource={temperatureData} columns={[
+                { title: "ID", dataIndex: "id", key: "id" },
+                { title: "Temperature (°C)", dataIndex: "temperature", key: "temperature" },
+                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
+              ]} pagination={false} rowKey="id" />
+            </TabPane>
+            <TabPane tab="Humidity Data" key="3">
+              {renderChart(humidityData, "Humidity (%)", "humidity_value")}
+              <Table dataSource={humidityData} columns={[
+                { title: "ID", dataIndex: "id", key: "id" },
+                { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
+                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
+              ]} pagination={false} rowKey="id" />
+            </TabPane>
+          </Tabs>
           <Button 
-          type="primary" 
-          style={{ marginTop: "20px" }} 
-          onClick={fetchCsvSummary}
+            type="primary" 
+            style={{ marginTop: "20px" }} 
+            onClick={fetchCsvSummary}
           >
-          Download CSV Summary
+            Download CSV Summary
           </Button>
-          <TabPane tab="LDR Data" key="1">
-            {renderChart(ldrData, "LDR Value", "ldr_value")}
-            <Table dataSource={ldrData} columns={[
-              { title: "ID", dataIndex: "id", key: "id" },
-              { title: "LDR Value", dataIndex: "ldr_value", key: "ldr_value" },
-              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
-            ]} pagination={false} rowKey="id" />
-          </TabPane>
-          <TabPane tab="Temperature Data" key="2">
-            {renderChart(temperatureData, "Temperature (°C)", "temperature")}
-            <Table dataSource={temperatureData} columns={[
-              { title: "ID", dataIndex: "id", key: "id" },
-              { title: "Temperature (°C)", dataIndex: "temperature", key: "temperature" },
-              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
-            ]} pagination={false} rowKey="id" />
-          </TabPane>
-          <TabPane tab="Humidity Data" key="3">
-            {renderChart(humidityData, "Humidity (%)", "humidity_value")}
-            <Table dataSource={humidityData} columns={[
-              { title: "ID", dataIndex: "id", key: "id" },
-              { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
-              { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
-            ]} pagination={false} rowKey="id" />
-          </TabPane>
-        </Tabs>
+        </>
       )}
-      
     </div>
   );
 };
