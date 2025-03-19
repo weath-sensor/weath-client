@@ -22,7 +22,7 @@ jobs:
           script: |
             cd devstore/weath-sensor/weath-client
             
-            pkill -f "npm run dev" || echo "No existing process found"
+            pkill -f "npm run dev" > /dev/null 2>&1 || true
             
             git pull origin main
             npm install
