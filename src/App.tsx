@@ -87,7 +87,6 @@ const App: React.FC = () => {
               Total records: {ldrData.length}
             </div>
           </TabPane>
-          {/* You can add more tabs here */}
           <TabPane tab="Other Tab" key="2">
             <div
               style={{
