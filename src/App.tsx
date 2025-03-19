@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Tabs, Card } from "antd";
+import { Table, Tabs, Card, Button } from "antd";
 import "antd/dist/reset.css";
 import { CanvasJSChart } from 'canvasjs-react-charts';
 
@@ -10,6 +10,7 @@ const App: React.FC = () => {
   const [temperatureData, setTemperatureData] = useState([]);
   const [humidityData, setHumidityData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [csvData, setCsvData] = useState('');
   const [activeTab, setActiveTab] = useState("1");
 
   const limitData = (data) => data.slice(-50).reverse();
@@ -25,6 +26,17 @@ const App: React.FC = () => {
     }
   };
 
+  const fetchCsvData = async () => {
+    try {
+      const response = await fetch("http://51.222.111.230:3000/csv/summary");  // Change the URL if needed
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const text = await response.text();
+      setCsvData(text);  // Set the CSV data for display
+    } catch (error) {
+      console.error('Error fetching CSV:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchAllData = async () => {
       await fetchData("http://51.222.111.230:3000/ldr-data", setLdrData);
@@ -35,6 +47,10 @@ const App: React.FC = () => {
     fetchAllData();
     const intervalId = setInterval(fetchAllData, 5000);
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    fetchCsvData();  // Fetch CSV data when the component mounts
   }, []);
 
   const renderChart = (data, label, yKey) => {
@@ -87,6 +103,11 @@ const App: React.FC = () => {
               { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
               { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t) => new Date(t).toLocaleString() },
             ]} pagination={false} rowKey="id" />
+          </TabPane>
+          <TabPane tab="CSV Data" key="4">
+            <Card title="CSV Summary">
+              <pre>{csvData}</pre>  {/* Display CSV content */}
+            </Card>
           </TabPane>
         </Tabs>
       )}
