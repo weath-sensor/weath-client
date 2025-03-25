@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Table, Tabs, } from "antd";
 import "antd/dist/reset.css";
 import { CanvasJSChart } from 'canvasjs-react-charts';
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-
 
 const { TabPane } = Tabs;
 
@@ -27,9 +24,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      await fetchData(`${API_BASE_URL}/ldr-data`, setLdrData);
-      await fetchData(`${API_BASE_URL}/temperature`, setTemperatureData);
-      await fetchData(`${API_BASE_URL}/humidity`, setHumidityData);
+      await fetchData(`${import.meta.env.VITE_API_BASE_URL}/ldr-data`, setLdrData);
+      await fetchData(`${import.meta.env.VITE_API_BASE_URL}/temperature`, setTemperatureData);
+      await fetchData(`${import.meta.env.VITE_API_BASE_URL}/humidity`, setHumidityData);
       setLoading(false);
     };
     fetchAllData();
