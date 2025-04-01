@@ -12,14 +12,19 @@ A React-based weather sensor dashboard using Vite, Zustand for state management,
 ## Installation
 
 1. Clone the repository:
+```
    git clone https://github.com/weath-sensor/weath-client.git
    cd weath-client
-
+```
 2. Install dependencies:
+```
    npm install
-
+```
 3. Create a `.env` file in the root directory:
+```   
    VITE_API_URL=http://your-api-url.com
-
+```
 4. Start the development server:
+```   
    npm run dev
+```
