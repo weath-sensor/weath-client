@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface DataStore {
+type DataProps = {
   ldrData: { id: number; ldr_value: number; timestamp: string }[];
   temperatureData: { id: number; temperature: number; timestamp: string }[];
   humidityData: { id: number; humidity_value: number; timestamp: string }[];
@@ -8,7 +8,7 @@ interface DataStore {
   fetchAllData: () => void;
 }
 
-export const useDataStore = create<DataStore>((set) => ({
+export const useDataStore = create<DataProps>((set) => ({
   ldrData: [],
   temperatureData: [],
   humidityData: [],
