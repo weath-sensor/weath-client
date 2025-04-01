@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Table, Tabs, } from "antd";
 import "antd/dist/reset.css";
 import Chart from "./components/Chart/Chart";
+import { formatDate } from "./utils/formatDate";
 const { TabPane } = Tabs;
-
 const App: React.FC = () => {
   const [ldrData, setLdrData] = useState<{ id: number; ldr_value: number; timestamp: string }[]>([]);
   const [temperatureData, setTemperatureData] = useState<{ id: number; temperature: number; timestamp: string }[]>([]);
@@ -33,6 +33,7 @@ const App: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+
   return (
     <div style={{ padding: "20px" }}>
       {loading ? (
@@ -45,7 +46,7 @@ const App: React.FC = () => {
             <Table dataSource={ldrData} columns={[
                 { title: "ID", dataIndex: "id", key: "id" },
                 { title: "LDR Value", dataIndex: "ldr_value", key: "ldr_value" },
-                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
+                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: formatDate },
               ]} pagination={false} rowKey="id" />
             </TabPane>
             <TabPane tab="Temperature Data" key="2">
@@ -53,7 +54,7 @@ const App: React.FC = () => {
               <Table dataSource={temperatureData} columns={[
                 { title: "ID", dataIndex: "id", key: "id" },
                 { title: "Temperature (°C)", dataIndex: "temperature", key: "temperature" },
-                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
+                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: formatDate },
               ]} pagination={false} rowKey="id" />
             </TabPane>
             <TabPane tab="Humidity Data" key="3">
@@ -61,7 +62,7 @@ const App: React.FC = () => {
               <Table dataSource={humidityData} columns={[
                 { title: "ID", dataIndex: "id", key: "id" },
                 { title: "Humidity (%)", dataIndex: "humidity_value", key: "humidity_value" },
-                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: (t: string) => new Date(t).toLocaleString() },
+                { title: "Timestamp", dataIndex: "timestamp", key: "timestamp", render: formatDate },
               ]} pagination={false} rowKey="id" />
             </TabPane>
           </Tabs>

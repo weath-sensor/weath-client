@@ -12,7 +12,7 @@ type ChartProps = {
     yKey: string;
 };
 
-const Chart: React.FC<ChartProps> = ({ data, label, yKey }) => {
+const Chart: FC<ChartProps> = ({ data, label, yKey }) => {
   const chartData = data.map((item) => ({
     x: new Date(item.timestamp),
     y: item[yKey],
