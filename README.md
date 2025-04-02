@@ -18,7 +18,6 @@ A React-based weather sensor dashboard using Vite, Zustand for state management,
    git clone https://github.com/weath-sensor/weath-client.git
    cd weath-client
 ```
-```
 2. Install dependencies:
 ```
    npm install
