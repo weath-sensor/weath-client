@@ -2,7 +2,7 @@
 
 A React-based weather sensor dashboard using Vite, Zustand for state management, and CanvasJS for data visualization.
 
-[Live Demo](https://http://51.222.111.230:5173)
+[Live Demo](http://51.222.111.230:5173)
 
 ## Features
 
@@ -16,7 +16,9 @@ A React-based weather sensor dashboard using Vite, Zustand for state management,
 1. Clone the repository:
 ```
    git clone https://github.com/weath-sensor/weath-client.git
+```
    cd weath-client
+```
 ```
 2. Install dependencies:
 ```
