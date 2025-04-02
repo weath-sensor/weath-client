@@ -24,7 +24,7 @@ A React-based weather sensor dashboard using Vite, Zustand for state management,
 ```
 3. Create a `.env` file in the root directory:
 ```   
-   VITE_API_URL=http://your-api-url.com
+   VITE_API_BASE_URL=http://your-api-url.com
 ```
 4. Start the development server:
 ```   
