@@ -22,7 +22,7 @@ const App: FC = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "40px" }}>
       {loading ? (
         <p>Loading...</p>
       ) : (
