@@ -2,6 +2,8 @@
 
 A React-based weather sensor dashboard using Vite, Zustand for state management, and CanvasJS for data visualization.
 
+[Live Demo](http://51.222.111.230:5173)
+
 ## Features
 
 - Real-time LDR, temperature, and humidity data visualization.
@@ -24,7 +26,7 @@ A React-based weather sensor dashboard using Vite, Zustand for state management,
 ```
 3. Create a `.env` file in the root directory:
 ```   
-   VITE_API_URL=http://your-api-url.com
+   VITE_API_BASE_URL=http://your-api-url.com
 ```
 4. Start the development server:
 ```   
